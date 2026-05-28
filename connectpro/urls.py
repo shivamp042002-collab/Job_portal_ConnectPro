@@ -17,15 +17,15 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('admin/',           admin.site.urls),
     path('api/v1/auth/',     include('apps.accounts.urls')),
     path('api/v1/profiles/', include('apps.profiles.urls')),
     path('api/v1/posts/',    include('apps.posts.urls')),
     path('api/v1/messages/', include('apps.messaging.urls')),
     path('accounts/',        include('allauth.urls')),
-    path('api/docs/',  schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
-    path('api/redoc/', schema_view.with_ui('redoc',   cache_timeout=0), name='redoc'),
-    path('', include('apps.accounts.frontend_urls')),
+    path('api/docs/',        schema_view.with_ui('swagger', cache_timeout=0), name='swagger-ui'),
+    path('api/redoc/',       schema_view.with_ui('redoc',   cache_timeout=0), name='redoc'),
+    path('',                 include('apps.accounts.frontend_urls')),
 ]
 
 if settings.DEBUG:
