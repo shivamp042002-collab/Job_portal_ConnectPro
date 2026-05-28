@@ -36,10 +36,12 @@ class FeedView(generics.ListAPIView):
         return {'request': self.request}
 
 
+from apps.accounts.throttles import PostRateThrottle
+
 class PostCreateView(generics.CreateAPIView):
-    """Create a new post."""
     serializer_class   = PostCreateSerializer
     permission_classes = [IsAuthenticated]
+    throttle_classes   = [PostRateThrottle] 
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)

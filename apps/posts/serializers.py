@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Post, Like, Comment
 from django.contrib.auth import get_user_model
+from apps.core.validators import validate_post_content, validate_image_size
 
 User = get_user_model()
 
@@ -10,11 +11,12 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model  = Comment
-        fields = [
-            'id', 'author_username', 'content',
-            'created_at', 'updated_at'
-        ]
+        fields = ['id', 'author_username', 'content', 'created_at', 'updated_at']
         read_only_fields = ['id', 'author_username', 'created_at', 'updated_at']
+
+    def validate_content(self, value):
+        validate_post_content(value)
+        return value
 
 
 class PostSerializer(serializers.ModelSerializer):
@@ -54,3 +56,12 @@ class PostCreateSerializer(serializers.ModelSerializer):
         model  = Post
         fields = ['id', 'content', 'image']
         read_only_fields = ['id']
+
+    def validate_content(self, value):
+        validate_post_content(value)
+        return value
+
+    def validate_image(self, value):
+        if value:
+            validate_image_size(value)
+        return value

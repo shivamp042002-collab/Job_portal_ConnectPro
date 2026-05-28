@@ -96,9 +96,11 @@ class MessageListView(generics.ListAPIView):
         return {'request': self.request}
 
 
+from apps.accounts.throttles import MessageRateThrottle
+
 class SendMessageView(APIView):
-    """Send a message in a thread."""
     permission_classes = [IsAuthenticated]
+    throttle_classes   = [MessageRateThrottle]
 
     def post(self, request, thread_id):
         thread = get_object_or_404(

@@ -11,9 +11,10 @@ User = get_user_model()
 
 
 class RegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
+    queryset           = User.objects.all()
     permission_classes = [AllowAny]
-    serializer_class = RegisterSerializer
+    serializer_class   = RegisterSerializer
+    throttle_classes   = [RegisterRateThrottle]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
@@ -29,10 +30,11 @@ class RegisterView(generics.CreateAPIView):
             }
         }, status=status.HTTP_201_CREATED)
 
+from apps.accounts.throttles import LoginRateThrottle, RegisterRateThrottle
 
 class LoginView(APIView):
     permission_classes = [AllowAny]
-    throttle_scope = 'login'
+    throttle_classes   = [LoginRateThrottle]
 
     def post(self, request):
         email    = request.data.get('email', '').strip().lower()

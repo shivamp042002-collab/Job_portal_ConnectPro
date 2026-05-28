@@ -1,6 +1,7 @@
 from rest_framework import serializers
 from .models import Thread, Message
 from django.contrib.auth import get_user_model
+from apps.core.validators import validate_message_content
 
 User = get_user_model()
 
@@ -24,9 +25,11 @@ class MessageSerializer(serializers.ModelSerializer):
 
     def get_is_mine(self, obj):
         request = self.context.get('request')
-        if request:
-            return obj.sender == request.user
-        return False
+        return obj.sender == request.user if request else False
+
+    def validate_content(self, value):
+        validate_message_content(value)
+        return value
 
 
 class ThreadSerializer(serializers.ModelSerializer):

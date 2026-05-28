@@ -174,3 +174,96 @@ EMAIL_PORT = config('EMAIL_PORT', default=587, cast=int)
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_HOST_USER', default='')
 EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD', default='')
+# Add to INSTALLED_APPS LOCAL_APPS list
+LOCAL_APPS = [
+    'apps.accounts',
+    'apps.profiles',
+    'apps.posts',
+    'apps.messaging',
+    'apps.core',           # ← add this
+]
+
+# Add to MIDDLEWARE (after SecurityMiddleware)
+MIDDLEWARE = [
+    'django.middleware.security.SecurityMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
+    'apps.core.middleware.SecurityHeadersMiddleware',   # ← add
+    'apps.core.middleware.RequestLoggingMiddleware',    # ← add
+    'apps.core.middleware.InputSanitizationMiddleware', # ← add
+    'apps.core.middleware.JWTAuthMiddleware',           # ← add
+    'django.contrib.sessions.middleware.SessionMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
+    'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django.contrib.messages.middleware.MessageMiddleware',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
+]
+
+# Update REST_FRAMEWORK
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 10,
+    'DEFAULT_THROTTLE_CLASSES': [
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle',
+    ],
+    'DEFAULT_THROTTLE_RATES': {
+        'anon':     '100/day',
+        'user':     '1000/day',
+        'login':    '5/min',
+        'register': '10/hour',
+        'message':  '60/min',
+        'post':     '30/hour',
+    },
+    'DEFAULT_RENDERER_CLASSES': [
+        'rest_framework.renderers.JSONRenderer',
+    ],
+    # ← Add this — uses our custom error handler
+    'EXCEPTION_HANDLER': 'apps.core.exceptions.custom_exception_handler',
+}
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style':  '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style':  '{',
+        },
+    },
+    'handlers': {
+        'console': {
+            'class':     'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'class':     'logging.FileHandler',
+            'filename':  BASE_DIR / 'logs/connectpro.log',
+            'formatter': 'verbose',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':  ['console'],
+            'level':     'WARNING',
+            'propagate': True,
+        },
+        'apps': {
+            'handlers':  ['console', 'file'],
+            'level':     'INFO',
+            'propagate': False,
+        },
+    },
+}
