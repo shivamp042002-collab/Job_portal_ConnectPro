@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Feed — ConnectPro{% endblock %}
+
+{% block content %}
+<div class="feed-container">
+
+    <div class="create-post-card">
+        <div class="create-post-top">
+            <div class="post-avatar" id="feed-avatar">?</div>
+            <input type="text" id="post-input"
+                   placeholder="Share something with your network..."
+                   onclick="document.getElementById('post-form').style.display='block'">
+        </div>
+        <div class="post-form" id="post-form" style="display:none">
+            <textarea id="post-content" placeholder="What's on your mind?" rows="3"></textarea>
+            <div class="post-form-actions">
+                <button id="submit-post" class="btn btn-primary">Post</button>
+                <button class="btn btn-outline"
+                        onclick="document.getElementById('post-form').style.display='none'">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="feed-list">
+        <div class="loading-spinner">Loading feed...</div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/feed.js' %}"></script>
+{% endblock %}

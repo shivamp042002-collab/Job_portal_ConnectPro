@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Dashboard — ConnectPro{% endblock %}
+
+{% block content %}
+<div class="dashboard-container">
+
+    <div class="dashboard-welcome" id="welcome-card">
+        <div class="welcome-avatar" id="welcome-avatar">?</div>
+        <div class="welcome-info">
+            <h2 id="welcome-name">Loading...</h2>
+            <p id="welcome-email"></p>
+        </div>
+        <a href="/profile/" class="btn btn-outline">View Profile</a>
+    </div>
+
+    <div class="dashboard-grid">
+        <div class="dash-card">
+            <div class="dash-icon">👥</div>
+            <div class="dash-stat" id="followers-count">0</div>
+            <div class="dash-label">Followers</div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-icon">➕</div>
+            <div class="dash-stat" id="following-count">0</div>
+            <div class="dash-label">Following</div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-icon">📝</div>
+            <div class="dash-stat">0</div>
+            <div class="dash-label">Posts</div>
+        </div>
+        <div class="dash-card">
+            <div class="dash-icon">💬</div>
+            <div class="dash-stat">0</div>
+            <div class="dash-label">Messages</div>
+        </div>
+    </div>
+
+    <div class="dashboard-actions">
+        <h3>Quick Actions</h3>
+        <div class="actions-grid">
+            <a href="/feed/"     class="action-btn">📰 View Feed</a>
+            <a href="/profile/"  class="action-btn">✏️ Edit Profile</a>
+            <a href="/messages/" class="action-btn">💬 Messages</a>
+            <a href="/api/docs/" class="action-btn" target="_blank">📖 API Docs</a>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/main.js' %}"></script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var token = getAccessToken();
+    if (!token) { window.location.href = '/login/'; return; }
+
+    apiCall('/api/v1/auth/me/', 'GET', null, function(status, data) {
+        if (status === 200) {
+            document.getElementById('welcome-name').textContent  = data.username;
+            document.getElementById('welcome-email').textContent = data.email;
+            document.getElementById('welcome-avatar').textContent = data.username.charAt(0).toUpperCase();
+        }
+    });
+
+    apiCall('/api/v1/profiles/me/', 'GET', null, function(status, data) {
+        if (status === 200) {
+            document.getElementById('followers-count').textContent = data.followers_count;
+            document.getElementById('following-count').textContent = data.following_count;
+        }
+    });
+});
+</script>
+{% endblock %}

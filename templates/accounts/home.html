@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}ConnectPro — Professional Network{% endblock %}
+
+{% block content %}
+<div class="hero">
+    <div class="hero-content">
+        <div class="hero-badge">Professional Networking Platform</div>
+        <h1>Connect with professionals<br>who inspire you</h1>
+        <p>Build your professional network, showcase your skills,
+           find opportunities and grow your career.</p>
+        <div class="hero-buttons">
+            <a href="/register/" class="btn btn-primary">Get Started Free</a>
+            <a href="/login/"    class="btn btn-outline">Sign In</a>
+        </div>
+        <div class="hero-stats">
+            <div class="hero-stat"><strong>10K+</strong><span>Professionals</span></div>
+            <div class="hero-stat"><strong>5K+</strong><span>Companies</span></div>
+            <div class="hero-stat"><strong>50K+</strong><span>Connections</span></div>
+        </div>
+    </div>
+</div>
+
+<section class="features">
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-icon">👤</div>
+            <h3>Build Your Profile</h3>
+            <p>Showcase your experience, skills and achievements to stand out.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">🤝</div>
+            <h3>Grow Your Network</h3>
+            <p>Connect and follow professionals in your industry.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">📝</div>
+            <h3>Share Your Ideas</h3>
+            <p>Post updates, articles and insights with your network.</p>
+        </div>
+        <div class="feature-card">
+            <div class="feature-icon">💬</div>
+            <h3>Direct Messages</h3>
+            <p>Have private conversations with your connections.</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

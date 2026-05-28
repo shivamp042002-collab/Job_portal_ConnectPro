@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Profile — ConnectPro{% endblock %}
+
+{% block content %}
+<div class="profile-container">
+
+    <div class="profile-card">
+        <div class="profile-cover"></div>
+        <div class="profile-info">
+            <div class="profile-avatar" id="profile-avatar">?</div>
+            <div class="profile-details">
+                <h1 id="profile-name">Loading...</h1>
+                <p id="profile-headline" class="profile-headline"></p>
+                <p id="profile-location" class="profile-location">📍 <span></span></p>
+            </div>
+            <div class="profile-actions">
+                <button id="follow-btn" class="btn btn-primary"  style="display:none">Follow</button>
+                <a      id="edit-btn"   class="btn btn-outline"  style="display:none" href="#">Edit Profile</a>
+            </div>
+        </div>
+        <div class="profile-stats">
+            <div class="stat"><span id="followers-count">0</span><label>Followers</label></div>
+            <div class="stat"><span id="following-count">0</span><label>Following</label></div>
+        </div>
+    </div>
+
+    <div class="profile-section">
+        <h3>About</h3>
+        <p id="profile-bio">No bio yet.</p>
+    </div>
+
+    <div class="profile-section">
+        <h3>Skills</h3>
+        <div id="profile-skills" class="skills-container"></div>
+    </div>
+
+    <div class="profile-section">
+        <h3>Experience</h3>
+        <div id="profile-experience"></div>
+    </div>
+
+    <div class="profile-section">
+        <h3>Education</h3>
+        <div id="profile-education"></div>
+    </div>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}

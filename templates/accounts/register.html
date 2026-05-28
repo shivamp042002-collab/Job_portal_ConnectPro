@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Register — ConnectPro{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <div class="auth-card">
+        <div class="auth-logo">🔗</div>
+        <h2>Join ConnectPro</h2>
+        <p class="auth-subtitle">Build your professional network today</p>
+
+        <div id="error-message"   class="alert alert-error"   style="display:none"></div>
+        <div id="success-message" class="alert alert-success" style="display:none"></div>
+
+        <div class="auth-form">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" placeholder="yourname" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="you@example.com" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password" placeholder="Min. 8 characters" required>
+                    <span class="toggle-pw" onclick="togglePassword('password')">👁</span>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password2">Confirm Password</label>
+                <div class="input-wrapper">
+                    <input type="password" id="password2" placeholder="Repeat your password" required>
+                    <span class="toggle-pw" onclick="togglePassword('password2')">👁</span>
+                </div>
+            </div>
+            <button id="register-btn" class="btn btn-primary btn-full">Create Account</button>
+        </div>
+
+        <p class="auth-footer">
+            Already have an account? <a href="/login/">Sign in</a>
+        </p>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'js/auth.js' %}"></script>
+{% endblock %}

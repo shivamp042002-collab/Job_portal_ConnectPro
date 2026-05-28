@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}ConnectPro{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        <a href="/">🔗 ConnectPro</a>
+    </div>
+    <div class="nav-links" id="nav-links">
+        <a href="/login/">Login</a>
+        <a href="/register/" class="btn-nav-register">Sign Up</a>
+    </div>
+</nav>
+
+<main class="main-content">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <p>&copy; 2024 ConnectPro. All rights reserved.</p>
+</footer>
+
+<script src="{% static 'js/main.js' %}"></script>
+{% block scripts %}{% endblock %}
+
+</body>
+</html>
