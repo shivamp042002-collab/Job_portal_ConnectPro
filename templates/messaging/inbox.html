@@ -6,18 +6,21 @@
 {% block content %}
 <div class="inbox-container">
 
+    <!-- Sidebar — thread list -->
     <div class="inbox-sidebar">
         <div class="inbox-header">
             <h3>Messages</h3>
-            <button class="btn btn-primary btn-sm" onclick="showNewMessage()">+ New</button>
+            <button class="btn btn-primary btn-sm"
+                    onclick="showNewMessage()">+ New</button>
         </div>
         <div id="thread-list">
-            <p class="empty-state">No messages yet.</p>
+            <div class="loading-spinner">Loading...</div>
         </div>
     </div>
 
-    <div class="inbox-main">
-        <div id="message-area" class="message-area-empty">
+    <!-- Main — message area -->
+    <div class="inbox-main" id="inbox-main">
+        <div class="message-area-empty">
             <div class="empty-state-icon">💬</div>
             <p>Select a conversation or start a new one</p>
         </div>
