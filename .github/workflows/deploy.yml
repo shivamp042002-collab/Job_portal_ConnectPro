@@ -1,0 +1,83 @@
+name: ConnectPro CI/CD
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+
+  # ── Job 1: Run Tests ──────────────────────────────────────
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      mysql:
+        image: mysql:8.0
+        env:
+          MYSQL_ROOT_PASSWORD: root
+          MYSQL_DATABASE:      connectpro_db
+        ports:
+          - 3306:3306
+        options: >-
+          --health-cmd="mysqladmin ping"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=3
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+
+      - name: Run tests
+        env:
+          DJANGO_SETTINGS_MODULE: connectpro.settings.dev
+          SECRET_KEY:             test-secret-key-for-ci
+          DB_NAME:                connectpro_db
+          DB_USER:                root
+          DB_PASSWORD:            root
+          DB_HOST:                127.0.0.1
+          DB_PORT:                3306
+          GOOGLE_CLIENT_ID:       placeholder
+          GOOGLE_CLIENT_SECRET:   placeholder
+        run: |
+          python manage.py migrate
+          python manage.py test apps --verbosity=2
+
+  # ── Job 2: Deploy to AWS EC2 ──────────────────────────────
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Deploy to EC2 via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host:     ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key:      ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/connectpro
+            git pull origin main
+            source venv/bin/activate
+            pip install -r requirements.txt
+            python manage.py migrate --settings=connectpro.settings.prod
+            python manage.py collectstatic --noinput --settings=connectpro.settings.prod
+            sudo systemctl restart connectpro
+            sudo systemctl restart nginx
+            echo "Deployment complete!"
